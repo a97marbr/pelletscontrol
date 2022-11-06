@@ -41,6 +41,7 @@ class Sensor:
       self.last30min = 0
       self.last45min = 0
       self.last60min = 0
+      print("Sensor ["+self.name+"] with path '"+self.path+"' created.")
    @classmethod
    def sense(self) :
       p1 = subprocess.Popen(["cat", self.path],  stdout=subprocess.PIPE)
