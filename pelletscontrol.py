@@ -42,16 +42,16 @@ class Sensor:
       self.last45min = 0
       self.last60min = 0
       print("Sensor ["+self.name+"] with path '"+self.path+"' created.")
-   @classmethod
-   def sense(self) :
-      p1 = subprocess.Popen(["cat", self.__name__],  stdout=subprocess.PIPE)
-      (output1, err) = p1.communicate()
-      new_sensor_value = float(output1)
-      self.delta = new_sensor_value - self.value 
-      self.value = new_sensor_value
-      self.readings.append(self.value)
-      if(self.readings.count > 60) :
-         self.readings.pop()
+   #@classmethod
+   #def sense(self) :
+   #   p1 = subprocess.Popen(["cat", self.__name__],  stdout=subprocess.PIPE)
+      # (output1, err) = p1.communicate()
+      # new_sensor_value = float(output1)
+      # self.delta = new_sensor_value - self.value 
+      # self.value = new_sensor_value
+      # self.readings.append(self.value)
+      # if(self.readings.count > 60) :
+      #    self.readings.pop()
 
 
 
