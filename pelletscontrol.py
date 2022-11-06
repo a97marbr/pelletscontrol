@@ -30,6 +30,31 @@ OFF = False
 LOG_UPDATE_TIME = 10 #In minutes
 
 
+class Sensor:
+   def __init__(self, name, path) -> None:
+      self.name = name
+      self.path = path
+      self.readings = []
+      self.value = 0.0
+      self.delta = 0.0
+      self.last15min = 0
+      self.last30min = 0
+      self.last45min = 0
+      self.last60min = 0
+   @classmethod
+   def sense(self) :
+      p1 = subprocess.Popen(["cat", self.path],  stdout=subprocess.PIPE)
+      (output1, err) = p1.communicate()
+      new_sensor_value = float(output1)
+      self.delta = new_sensor_value - self.value 
+      self.value = new_sensor_value
+      self.readings.append(self.value)
+      if(self.readings.count > 60) :
+         self.readings.pop()
+
+
+
+
 ## Configuration
 
 #TARGET_TEMP_START=73 ## Vinter inställning
@@ -40,6 +65,8 @@ TARGET_TEMP_STOP=75
 CONFIG_FILE = "/tmp/pelletscontrol.json"
 config = {"pelletscontrol":{}}
 LOGFILE="/run/user/1000/pelletscontrol.log"
+
+tank_top_obj = Sensor("TANK_TOP", TANK_TOP)
 
 # Variables used
 ACK_TEMP_TOP = 0.0
@@ -252,6 +279,10 @@ try:
          readAndLogSensors()
       else:
          readSensors()
+
+      tank_top_obj.sense()
+      logger.info("Sensor: "+tank_top_obj.name + " has value: " + tank_top_obj.value +  u"\u00B0"+"C.")
+      logger.info("Sensor: "+tank_top_obj.name + " has delta: " + tank_top_obj.delta +  u"\u00B0"+"C.")
 
       if config['pelletscontrol']['status'] == ON:
          if ACK_TEMP_TOP >= TARGET_TEMP_STOP:
