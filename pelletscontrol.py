@@ -31,7 +31,7 @@ LOG_UPDATE_TIME = 10 #In minutes
 
 
 class Sensor:
-   def __init__(self, name, path) -> None:
+   def __init__(self, name, path) :
       self.name = name
       self.path = path
       self.readings = []
